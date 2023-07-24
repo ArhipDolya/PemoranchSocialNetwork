@@ -1,10 +1,62 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel='stylesheet' href="{% static 'css/base_style.css' %}">
+    
+    {% block styling %}
+
+    {% endblock %}
+
+    {% block title %}
+
+    {% endblock %}
+
 </head>
 <body>
-<h1>Hello</h1>
+
+    <header>
+        <div class='logo'>
+            <a href='#'>Web dev creative</a>
+        </div>
+        <div class='hamburger'>
+            <div class='line'></div>
+            <div class='line'></div>
+            <div class='line'></div>
+        </div>
+        <nav class='nav-bar'>
+            <ul>
+                <li>
+                    <a href="" class='active'>Home</a>
+                </li>
+
+                <li>
+                    <a href="">Login</a>
+                </li>
+
+                <li>
+                    <a href="">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <script>
+        hamburger = document.querySelector(".hamburger");
+        hamburger.onclick = function () {
+            navBar = document.querySelector(".nav-bar");
+            navBar.classList.toggle('active');
+        }
+    </script>
+
+    {% block content %}
+    
+
+    {% endblock %}
 </body>
 </html>
