@@ -17,5 +17,6 @@ def login_view(request):
 
 
 def logout_view(request):
+    #return render(request, 'PemoranchApp/registration/logout.html')
     logout(request)
     return redirect('homepage')

@@ -34,7 +34,7 @@
                 <li>
                     <a href="{% url 'homepage' %}" class='active'>Home</a>
                 </li>
-                
+
                 {% if user.is_authenticated %}
                     <li>
                         <a href="{% url 'logout' %}">Logout</a>
