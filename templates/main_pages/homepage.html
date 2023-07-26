@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Homepage</title>
+{% endblock %}
+
+
+
+{% block content %}
+    <h1>Homepage</h1>
+
+    <div id='pemos'>
+
+    </div>
+
+    <script>
+        const pemosElement = document.getElementById('pemos');
+        pemosElement.innerHTML = 'Loading...';
+
+        let elem1 = '<h1>elem1</h1>'
+        let elem2 = '<h1>elem2</h1>'
+        let elem3 = '<h1>elem3</h1>'
+
+        pemosElement.innerHTML = elem1 + elem2 + elem3;
+
+        const xhr = new XMLHttpRequest();
+        const method = 'GET';
+        const url = '/pemos';
+        const responseType = 'json';
+    
+        xhr.responseType = responseType;
+        xhr.open(method, url);
+        xhr.onload = function() {
+            const serverResponse = xhr.response;
+            let items = serverResponse.response;
+            console.log(items);
+        }
+    
+        xhr.send();
+    </script>
+    
+    
+
+{% endblock %}

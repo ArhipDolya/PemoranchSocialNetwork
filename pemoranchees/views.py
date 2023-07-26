@@ -3,6 +3,19 @@ from django.http import HttpResponse, Http404, JsonResponse
 
 from .models import Pemoran
 
+
+def pemoran_list_view(request):
+    query = Pemoran.objects.all()
+    pemoranchees_list = [{'id': obj.id, 'content': obj.content} for obj in query]
+
+    data = {
+        'isUser': False,
+        'responce': pemoranchees_list,
+    }
+
+    return JsonResponse(data)
+
+
 def pemoran_details_view(request, pemoran_id):
 
     data = {

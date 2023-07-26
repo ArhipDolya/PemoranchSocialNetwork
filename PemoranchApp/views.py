@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 
 
 def homepage(request):
-    return render(request, 'PemoranchApp/homepage.html')
+    return render(request, 'main_pages/homepage.html')
 
 
 
