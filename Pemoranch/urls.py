@@ -8,6 +8,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('PemoranchApp.urls')),
     path('', include('pemoranchees.urls')),
-    path('pemos', views.pemoran_list_view),
+    path('pemos/', views.pemoran_list_view),
     path('pemos/<int:pemoran_id>', views.pemoran_details_view, name='pemoran_details_view'),
 ]

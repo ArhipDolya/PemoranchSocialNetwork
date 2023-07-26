@@ -9,36 +9,40 @@
 {% block content %}
     <h1>Homepage</h1>
 
-    <div id='pemos'>
-
-    </div>
+    <div id='pemos'></div>
 
     <script>
         const pemosElement = document.getElementById('pemos');
-        pemosElement.innerHTML = 'Loading...';
-
-        let elem1 = '<h1>elem1</h1>'
-        let elem2 = '<h1>elem2</h1>'
-        let elem3 = '<h1>elem3</h1>'
-
-        pemosElement.innerHTML = elem1 + elem2 + elem3;
-
+    
         const xhr = new XMLHttpRequest();
         const method = 'GET';
         const url = '/pemos';
         const responseType = 'json';
+
+        function formatingItemString(pemo) {
+            let formatedItem = "<div class='mb-4 pemo' id='pemo-" + pemo.id 
+            + "'><h3>" + pemo.content +
+                 "</h3></div>";
+            return formatedItem;
+        }
     
         xhr.responseType = responseType;
         xhr.open(method, url);
         xhr.onload = function() {
             const serverResponse = xhr.response;
-            let items = serverResponse.response;
-            console.log(items);
+            let items = serverResponse.responce;
+            let pemoString = '';
+    
+            for (let i = 0; i < items.length; i++) {
+                let item = formatingItemString(items[i])
+                pemoString += item;
+            }
+            pemosElement.innerHTML = pemoString;
         }
     
         xhr.send();
     </script>
     
-    
+
 
 {% endblock %}
