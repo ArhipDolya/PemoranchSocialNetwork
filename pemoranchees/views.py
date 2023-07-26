@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404, JsonResponse
 
 from .models import Pemoran
+import random
 
 
 def pemoran_list_view(request):
     query = Pemoran.objects.all()
-    pemoranchees_list = [{'id': obj.id, 'content': obj.content} for obj in query]
+    pemoranchees_list = [{'id': obj.id, 'content': obj.content, 'likes': random.randint(0, 100)} for obj in query]
 
     data = {
         'isUser': False,

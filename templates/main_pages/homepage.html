@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     <title>Homepage</title>
 {% endblock %}
 
 
-
 {% block content %}
-    <h1>Homepage</h1>
 
-    <div id='pemos'></div>
+    <div class='row text-center' style='margin-top: 10px;'>
+        <div class='col'>
+            <h1>Welcome to Pemoranch</h1>
+        </div>
+    </div>
+
+    <div class='row' id='pemos'>
+
+    </div>
 
     <script>
         const pemosElement = document.getElementById('pemos');
@@ -19,10 +26,20 @@
         const url = '/pemos';
         const responseType = 'json';
 
+        function likeBtn(pemo) {
+            return "<button class='btn btn-primary btn-sm' onclick=handleLike("
+             + pemo.id + "," + pemo.likes + ")>" + pemo.likes + " Likes</button>";
+        }
+        
+        function handleLike(pemo_id, count) {
+            console.log(pemo_id, count);
+        }
+
         function formatingItemString(pemo) {
-            let formatedItem = "<div class='mb-4 pemo' id='pemo-" + pemo.id 
-            + "'><h3>" + pemo.content +
-                 "</h3></div>";
+            let formatedItem = "<div class='col-12 col-md-9 mx-auto border rounded py-2 mb-4 pemo' id='pemo-" + pemo.id 
+                + "'><h4>" + pemo.content +
+                    "</h4><div class='btn btn-group'>" + likeBtn(pemo) +
+                    "</div></div>";
             return formatedItem;
         }
     
@@ -34,15 +51,12 @@
             let pemoString = '';
     
             for (let i = 0; i < items.length; i++) {
-                let item = formatingItemString(items[i])
+                let item = formatingItemString(items[i]);
                 pemoString += item;
             }
             pemosElement.innerHTML = pemoString;
         }
-    
+
         xhr.send();
     </script>
-    
-
-
 {% endblock %}

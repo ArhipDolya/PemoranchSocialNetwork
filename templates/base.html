@@ -22,44 +22,13 @@
 </head>
 <body>
 
-    <header>
-        <div class='logo'>
-            <a href="{% url 'homepage' %}">Pemoranch</a>
-        </div>
-        <div class='hamburger'>
-            <div class='line'></div>
-            <div class='line'></div>
-            <div class='line'></div>
-        </div>
-        <nav class='nav-bar'>
-            <ul>
-                <li>
-                    <a href="{% url 'homepage' %}" class='active'>Home</a>
-                </li>
+    {% include 'components/navBar.html' %}
 
-                {% if user.is_authenticated %}
-                    <li>
-                        <a href="{% url 'logout' %}">Logout</a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="{% url 'login' %}">Login</a>
-                    </li>
-                {% endif %}
+    <div class='container'>
+        {% block content %}
 
-                <li>
-                    <a href="{% url 'registration' %}">Register</a>
-                </li>
-
-                
-            </ul>
-        </nav>
-    </header>
-
-    {% block content %}
-    
-
-    {% endblock %}
+        {% endblock %}
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
