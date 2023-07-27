@@ -15,6 +15,9 @@ def pemoran_create_view(request):
         if form.is_valid():
             form.save()
 
+            if request.is_ajax():
+                return JsonResponse({}, status=201)
+
             return redirect('/')
         
     else:

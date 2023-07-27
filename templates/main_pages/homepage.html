@@ -16,10 +16,10 @@
 
     <div class='row mb-4'>
         <div class='col-md-3 mx-auto col-10'>
-            <form method='POST' class='form' action='/create-pemoran'>
-                    {% csrf_token %}
+            <form method='POST' class='form' id='pemoran-create-form' action='/create-pemoran'>
+                {% csrf_token %}
                 <input type='hidden' value='/' name='next' />
-                <textarea class='form-control' name='content' placeholder='Make your pemoran'></textarea>
+                <textarea class='form-control' name='content' placeholder='Create your pemoran'></textarea>
                 <button type='submit' class='btn btn-primary'>Create Pemoran</button>
             </form>
         </div>
@@ -30,12 +30,81 @@
     </div>
 
     <script>
-        const pemosElement = document.getElementById('pemos');
-    
-        const xhr = new XMLHttpRequest();
-        const method = 'GET';
-        const url = '/pemos';
-        const responseType = 'json';
+
+        function handling_form_submision(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+        
+            // Get the form data
+            const formData = new FormData(event.target);
+        
+            // Create a new XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+            const method = 'POST';
+            const url = '/create-pemoran';
+            const responseType = 'json';
+        
+            xhr.responseType = responseType;
+            xhr.open(method, url);
+            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+            xhr.setRequestHeader('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+
+            xhr.onload = function() {
+                const serverResponse = xhr.response
+                const pemosElem = document.getElementById('pemos')
+                loadPemorans(pemosElem)
+            }
+
+            xhr.send(formData);
+        }
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+
+        const pemoranCreateForm = document.getElementById('pemoran-create-form');
+        pemoranCreateForm.addEventListener('submit', handling_form_submision);
+
+
+        const pemosElem = document.getElementById('pemos');
+
+        function loadPemorans(pemosElement) {
+            const xhr = new XMLHttpRequest();
+            const method = 'GET';
+            const url = '/pemos';
+            const responseType = 'json';
+
+            xhr.responseType = responseType;
+            xhr.open(method, url);
+            xhr.onload = function() {
+                const serverResponse = xhr.response;
+                let items = serverResponse.responce;
+                let pemoString = '';
+                
+                for (let i = 0; i < items.length; i++) {
+                    let item = formatingItemString(items[i]);
+                    pemoString += item;
+                }
+                pemosElement.innerHTML = pemoString;
+            }
+
+            xhr.send();
+        }
+
+        loadPemorans(pemosElem);
 
         function likeBtn(pemo) {
             return "<button class='btn btn-primary btn-sm' onclick=handleLike("
@@ -54,20 +123,6 @@
             return formatedItem;
         }
     
-        xhr.responseType = responseType;
-        xhr.open(method, url);
-        xhr.onload = function() {
-            const serverResponse = xhr.response;
-            let items = serverResponse.responce;
-            let pemoString = '';
-    
-            for (let i = 0; i < items.length; i++) {
-                let item = formatingItemString(items[i]);
-                pemoString += item;
-            }
-            pemosElement.innerHTML = pemoString;
-        }
-
-        xhr.send();
+        
     </script>
 {% endblock %}
