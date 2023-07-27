@@ -10,4 +10,5 @@ urlpatterns = [
     path('', include('pemoranchees.urls')),
     path('pemos/', views.pemoran_list_view),
     path('pemos/<int:pemoran_id>', views.pemoran_details_view, name='pemoran_details_view'),
+    path('create-pemoran', views.pemoran_create_view, name='pemoran_create_view'),
 ]

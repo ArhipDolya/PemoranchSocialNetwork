@@ -14,6 +14,17 @@
         </div>
     </div>
 
+    <div class='row mb-4'>
+        <div class='col-md-3 mx-auto col-10'>
+            <form method='POST' class='form' action='/create-pemoran'>
+                    {% csrf_token %}
+                <input type='hidden' value='/' name='next' />
+                <textarea class='form-control' name='content' placeholder='Make your pemoran'></textarea>
+                <button type='submit' class='btn btn-primary'>Create Pemoran</button>
+            </form>
+        </div>
+    </div>
+
     <div class='row' id='pemos'>
 
     </div>

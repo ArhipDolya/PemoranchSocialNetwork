@@ -1,8 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
+from django.views.decorators.csrf import csrf_protect
 
 from .models import Pemoran
+from .forms import PemoranForm
 import random
+
+
+@csrf_protect
+def pemoran_create_view(request):
+    if request.method == 'POST':
+        form = PemoranForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('/')
+        
+    else:
+        form = PemoranForm()
+
+    return render(request, 'components/form.html', {'form': form})
 
 
 def pemoran_list_view(request):
