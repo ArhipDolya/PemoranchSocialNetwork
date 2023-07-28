@@ -20,6 +20,10 @@ def pemoran_create_view(request):
                 return JsonResponse(obj.serialize(), status=201)
 
             return render(request, 'homepage.html')
+        
+        if form.errors:
+            if request.is_ajax():
+                return JsonResponse(form.errors, status=400)
 
     else:
         form = PemoranForm()
@@ -27,6 +31,7 @@ def pemoran_create_view(request):
     return render(request, 'components/form.html', {'form': form})
 
 def pemoran_list_view(request):
+    
     query = Pemoran.objects.all()
     pemoranchees_list = [obj.serialize() for obj in query]
 

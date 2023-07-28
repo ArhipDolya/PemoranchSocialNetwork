@@ -18,6 +18,7 @@
         <div class='col-md-3 mx-auto col-10'>
             <form method='POST' class='form' id='pemoran-create-form' action='/create-pemoran'>
                 {% csrf_token %}
+                <div class='d-none alert alert-danger' id='pemo-create-form-error'></div>
                 <input type='hidden' value='/' name='next' />
                 <textarea class='form-control' name='content' placeholder='Create your pemoran'></textarea>
                 <button type='submit' class='btn btn-primary'>Create Pemoran</button>
@@ -57,19 +58,46 @@
             xhr.onload = function() {
 
                 if (xhr.status === 201) {
+                    handleFormError("", false);
                     const newPemoJSON = xhr.response;
                     const newPemoElem = formatingItemString(newPemoJSON);
                     pemosContainerElement.innerHTML = newPemoElem + pemosContainerElement.innerHTML;
-                    formData.reset()
+                    formData.reset();
 
+                } else if (xhr.status === 400) {
+                    const errorJson = xhr.response;
+                    const contentError = errorJson.content;
+    
+                    if (contentError && contentError[0]) {
+                        handleFormError(contentError[0].message, true);
+                    } else {
+                        handleFormError('An error occurred. Please try again.', true);
+                    }
+
+                } else if (xhr.status === 500) {
+                    alert('There was a server error. Please try again later.');
                 }
-
+    
                 loadPemorans(pemosContainerElement);
-            }
-        
+            };
+    
+            xhr.onerror = function() {
+                alert('An error occurred. Please try again later.');
+            };
+    
             xhr.send(formData);
         }
-        
+
+        function handleFormError(msg, display) {
+            let errorDiv = document.getElementById('pemo-create-form-error');
+            
+            if (display === true) {
+                errorDiv.setAttribute('class', 'd-block alert alert-danger');
+                errorDiv.innerText = msg;
+            } else {
+                errorDiv.setAttribute('class', 'd-none alert alert-danger');
+            }
+        }
         
         
         function getCookie(name) {
