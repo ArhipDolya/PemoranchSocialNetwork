@@ -13,22 +13,22 @@ def pemoran_create_view(request):
         form = PemoranForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.save()
 
             if request.is_ajax():
-                return JsonResponse({}, status=201)
+                return JsonResponse(obj.serialize(), status=201)
 
-            return redirect('/')
-        
+            return render(request, 'homepage.html')
+
     else:
         form = PemoranForm()
 
     return render(request, 'components/form.html', {'form': form})
 
-
 def pemoran_list_view(request):
     query = Pemoran.objects.all()
-    pemoranchees_list = [{'id': obj.id, 'content': obj.content, 'likes': random.randint(0, 100)} for obj in query]
+    pemoranchees_list = [obj.serialize() for obj in query]
 
     data = {
         'isUser': False,

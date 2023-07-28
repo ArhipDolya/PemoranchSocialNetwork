@@ -36,6 +36,11 @@
         
             // Get the form data
             const formData = new FormData(event.target);
+
+            const content = formData.get('content');
+            if (!content.trim()) {
+                return;
+            }
         
             // Create a new XMLHttpRequest object
             const xhr = new XMLHttpRequest();
@@ -48,15 +53,24 @@
             xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
             xhr.setRequestHeader('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-
+        
             xhr.onload = function() {
-                const serverResponse = xhr.response
-                const pemosElem = document.getElementById('pemos')
-                loadPemorans(pemosElem)
-            }
 
+                if (xhr.status === 201) {
+                    const newPemoJSON = xhr.response;
+                    const newPemoElem = formatingItemString(newPemoJSON);
+                    pemosContainerElement.innerHTML = newPemoElem + pemosContainerElement.innerHTML;
+                    formData.reset()
+
+                }
+
+                loadPemorans(pemosContainerElement);
+            }
+        
             xhr.send(formData);
         }
+        
+        
         
         function getCookie(name) {
             let cookieValue = null;
@@ -78,8 +92,7 @@
         const pemoranCreateForm = document.getElementById('pemoran-create-form');
         pemoranCreateForm.addEventListener('submit', handling_form_submision);
 
-
-        const pemosElem = document.getElementById('pemos');
+        const pemosContainerElement = document.getElementById('pemos');
 
         function loadPemorans(pemosElement) {
             const xhr = new XMLHttpRequest();
@@ -104,7 +117,7 @@
             xhr.send();
         }
 
-        loadPemorans(pemosElem);
+        loadPemorans(pemosContainerElement);
 
         function likeBtn(pemo) {
             return "<button class='btn btn-primary btn-sm' onclick=handleLike("
