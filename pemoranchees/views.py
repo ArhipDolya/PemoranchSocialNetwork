@@ -45,6 +45,25 @@ def pemoran_create_view(request):
 
     return render(request, 'components/form.html', {'form': form})
 
+@api_view(['GET'])
+def pemoran_list_view(request):
+    query = Pemoran.objects.all()
+    serializer = PemoranSerializer(query, many=True)
+    pemoranchees_list = [obj.serialize() for obj in query]
+
+    return Response(serializer.data, status=200)
+
+@api_view(['GET'])
+def pemoran_details_view(request, pemoran_id):
+    query = Pemoran.objects.filter(id=pemoran_id)
+    if not query.exists:
+        return Response({}, status=404)
+    obj = query.first()
+    serializer = PemoranSerializer(obj)
+
+    return Response(serializer.data, status=200)
+    
+
 
 @csrf_protect
 def pemoran_create_view_django(request):
@@ -79,7 +98,9 @@ def pemoran_create_view_django(request):
 
     return render(request, 'components/form.html', {'form': form})
 
-def pemoran_list_view(request):
+
+
+def pemoran_list_view_django(request):
     
     query = Pemoran.objects.all()
     pemoranchees_list = [obj.serialize() for obj in query]
@@ -92,7 +113,7 @@ def pemoran_list_view(request):
     return JsonResponse(data)
 
 
-def pemoran_details_view(request, pemoran_id):
+def pemoran_details_view_django(request, pemoran_id):
 
     data = {
         'id': pemoran_id,

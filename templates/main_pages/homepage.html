@@ -135,7 +135,7 @@
             xhr.open(method, url);
             xhr.onload = function() {
                 const serverResponse = xhr.response;
-                let items = serverResponse.responce;
+                let items = serverResponse;
                 let pemoString = '';
                 
                 for (let i = 0; i < items.length; i++) {
