@@ -1,9 +1,8 @@
 from django import forms
+from django.conf import settings
 
 from .models import Pemoran
 
-
-MAX_CONTENT_LENTGH = 260
 
 class PemoranForm(forms.ModelForm):
 
@@ -14,7 +13,7 @@ class PemoranForm(forms.ModelForm):
     def clean_content(self):
         content = self.cleaned_data.get('content')
 
-        if len(content) > MAX_CONTENT_LENTGH:
+        if len(content) > settings.MAX_CONTENT_LENGTH:
             raise forms.ValidationError('This pemoran is very long')
         else:
             return content

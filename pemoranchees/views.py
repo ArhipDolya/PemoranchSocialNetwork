@@ -1,28 +1,76 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from django.conf import settings
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from .serializers import PemoranSerializer
 
 from .models import Pemoran
 from .forms import PemoranForm
 import random
 
 
-@csrf_protect
+def my_is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def pemoran_create_view(request):
     if request.method == 'POST':
         form = PemoranForm(request.POST)
+        user = request.user
 
         if form.is_valid():
             obj = form.save(commit=False)
+            obj.user = user
             obj.save()
 
-            if request.is_ajax():
+            if my_is_ajax(request):
+                return Response(obj.serialize(), status=status.HTTP_201_CREATED)
+
+            return render(request, 'homepage.html')
+
+        if form.errors:
+            if my_is_ajax(request):
+                return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    else:
+        form = PemoranForm()
+
+    return render(request, 'components/form.html', {'form': form})
+
+
+@csrf_protect
+def pemoran_create_view_django(request):
+    if request.method == 'POST':
+        form = PemoranForm(request.POST)
+        user = request.user
+
+        if not request.user.is_authenticated:
+            user = None
+
+            if my_is_ajax(request=request):
+                return JsonResponse({}, status=401)
+            
+            return redirect(settings.LOGIN_URL)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = user
+            obj.save()
+
+            if my_is_ajax(request=request):
                 return JsonResponse(obj.serialize(), status=201)
 
             return render(request, 'homepage.html')
         
         if form.errors:
-            if request.is_ajax():
+            if my_is_ajax(request=request):
                 return JsonResponse(form.errors, status=400)
 
     else:

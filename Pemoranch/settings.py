@@ -13,8 +13,9 @@ SECRET_KEY = 'django-insecure-13n)s+!f5peby_(^)ub72(4$61#tschkp22*bw_#b=-jj)1nye
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+LOGIN_URL = '/login'
+MAX_CONTENT_LENGTH = 260
 
 # Application definition
 
@@ -26,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'rest_framework',
+
     'PemoranchApp',
     'pemoranchees',
 ]
