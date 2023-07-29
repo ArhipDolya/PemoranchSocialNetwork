@@ -16,6 +16,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 LOGIN_URL = '/login'
 MAX_CONTENT_LENGTH = 260
+PEMORAN_ACTION_OPTIONS = ['like', 'unlike', 'repemoran']
 
 # Application definition
 

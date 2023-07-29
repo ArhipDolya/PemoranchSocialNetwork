@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .serializers import PemoranSerializer
+from .serializers import PemoranSerializer, PemoranActionSerializer
 
 from .models import Pemoran
 from .forms import PemoranForm
@@ -74,6 +74,29 @@ def pemoran_delete_view(request, pemoran_id):
     pemoran.delete()
     return Response({'message': 'Pemoran deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def pemoran_action_toggle_view(request):
+    serializer = PemoranActionSerializer(data=request.POST)
+
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        pemoran_id = data.get('id')
+        action = data.get('action')
+
+        query = Pemoran.objects.filter(id=pemoran_id)
+
+        if not query.exists:
+            return Response({}, status=404)
+        obj = query.first()
+
+        if action == 'like':
+            obj.likes.add(request.user)
+        elif action == 'unlike':
+            obj.likes.remove(request.user)
+
+    return Response({'message': "Pemoran liked"}, status=200)
 
 
 @csrf_protect
