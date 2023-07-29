@@ -62,6 +62,17 @@ def pemoran_details_view(request, pemoran_id):
     serializer = PemoranSerializer(obj)
 
     return Response(serializer.data, status=200)
+
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def pemoran_delete_view(request, pemoran_id):
+    try:
+        pemoran = Pemoran.objects.get(id=pemoran_id)
+    except Pemoran.DoesNotExist:
+        return Response({'message': 'Pemoran not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    pemoran.delete()
+    return Response({'message': 'Pemoran deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     
 
 
