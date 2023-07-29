@@ -77,8 +77,11 @@
                 } else if (xhr.status === 401) {
                     alert('You must log in');
                     window.location.href = '/login'
+                } else if (xhr.status === 403) {
+                    alert('You must log in');
+                    window.location.href = '/login' 
                 } else if (xhr.status === 500) {
-                    alert('')
+                    alert('There was a server error. Please try again.')
                 }
     
                 loadPemorans(pemosContainerElement);
