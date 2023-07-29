@@ -22,22 +22,23 @@ def my_is_ajax(request):
 @permission_classes([IsAuthenticated])
 def pemoran_create_view(request):
     if request.method == 'POST':
-        form = PemoranForm(request.POST)
-        user = request.user
+        form = PemoranForm(request.POST, user=request.user)
+        serializer = PemoranSerializer(data=request.data)
 
-        if form.is_valid():
+        if form.is_valid() and serializer.is_valid():
             obj = form.save(commit=False)
-            obj.user = user
+            obj.user = request.user
             obj.save()
 
             if my_is_ajax(request):
-                return Response(obj.serialize(), status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
             return render(request, 'homepage.html')
 
-        if form.errors:
+        if form.errors or serializer.errors:
+            errors = {**form.errors, **serializer.errors}
             if my_is_ajax(request):
-                return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
     else:
         form = PemoranForm()

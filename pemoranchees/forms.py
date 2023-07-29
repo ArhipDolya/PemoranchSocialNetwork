@@ -10,6 +10,18 @@ class PemoranForm(forms.ModelForm):
         model = Pemoran
         fields = ['content']
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        obj.user = self.user
+        if commit:
+            obj.save()
+        return obj
+
     def clean_content(self):
         content = self.cleaned_data.get('content')
 
