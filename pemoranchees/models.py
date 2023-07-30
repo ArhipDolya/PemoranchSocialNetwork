@@ -28,6 +28,6 @@ class Pemoran(models.Model):
         return {
             'id': self.id,
             'content': self.content,
-            'likes': random.randint(0, 100),
+            'likes': self.likes.count(),
         }
     

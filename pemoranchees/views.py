@@ -21,29 +21,12 @@ def my_is_ajax(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def pemoran_create_view(request):
-    if request.method == 'POST':
-        form = PemoranForm(request.POST, user=request.user)
-        serializer = PemoranSerializer(data=request.data)
+    serializer = PemoranSerializer(data=request.POST)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if form.is_valid() and serializer.is_valid():
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.save()
-
-            if my_is_ajax(request):
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-            return render(request, 'homepage.html')
-
-        if form.errors or serializer.errors:
-            errors = {**form.errors, **serializer.errors}
-            if my_is_ajax(request):
-                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-
-    else:
-        form = PemoranForm()
-
-    return render(request, 'components/form.html', {'form': form})
 
 @api_view(['GET'])
 def pemoran_list_view(request):
@@ -77,32 +60,39 @@ def pemoran_delete_view(request, pemoran_id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def pemoran_action_toggle_view(request):
-    serializer = PemoranActionSerializer(data=request.POST)
+def pemoran_action_view(request):
+    serializer = PemoranActionSerializer(data=request.data)
 
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
-        pemoran_id = data.get('id')
+        pemoran_id = data.get('id') 
         action = data.get('action')
 
         query = Pemoran.objects.filter(id=pemoran_id)
 
         if not query.exists:
-            return Response({}, status=404)
+            return Response({"message": "Pemoran not found"}, status=404)
+        
         obj = query.first()
 
         if action == 'like':
             obj.likes.add(request.user)
+            serializer = PemoranSerializer(obj)
+            return Response(serializer.data, status=200)    
         elif action == 'unlike':
             obj.likes.remove(request.user)
+        elif action == 'repemo':
+            pass
 
-    return Response({'message': "Pemoran liked"}, status=200)
+        return Response({}, status=200)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @csrf_protect
 def pemoran_create_view_django(request):
     if request.method == 'POST':
-        form = PemoranForm(request.POST)
+        form = PemoranForm(request.post)
         user = request.user
 
         if not request.user.is_authenticated:
