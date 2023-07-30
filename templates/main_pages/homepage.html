@@ -153,12 +153,12 @@
 
         loadPemorans(pemosContainerElement);
         
-        function handleLike(pemo_id, count) {
+        function handlePemoAction(pemo_id, count, action) {
 
             const xhr = new XMLHttpRequest();
             const method = 'POST';
             const url = '/api/pemos/action'
-            const data = JSON.stringify({ id: pemo_id, action: 'like' });
+            const data = JSON.stringify({ id: pemo_id, action: action });
             const responseType = 'json';
         
             xhr.responseType = responseType;
@@ -183,15 +183,30 @@
             xhr.send(data);
         }
 
+    
+
         function likeBtn(pemo) {
-            return "<button class='btn btn-primary btn-sm' onclick=handleLike("
-             + pemo.id + "," + pemo.likes + ")>" + pemo.likes + " Likes</button>";
+            return "<button class='btn btn-primary btn-sm' onclick=handlePemoAction("
+                + pemo.id + "," + pemo.likes + ",'like')>" + pemo.likes + " Likes</button>";
+        }
+        
+        function unlikeBtn(pemo) {
+            return "<button class='btn btn-outline-primary btn-sm' onclick=handlePemoAction("
+                + pemo.id + "," + pemo.likes + ",'unlike')>UnLike</button>";
+        }
+
+        function rePemoBtn(pemo) {
+            return "<button class='btn btn-outline-success btn-sm' onclick=handlePemoAction("
+                + pemo.id + ",'repemo')>RePemo</button>";
         }
 
         function formatingItemString(pemo) {
             let formatedItem = "<div class='col-12 col-md-9 mx-auto border rounded py-2 mb-4 pemo' id='pemo-" + pemo.id 
                 + "'><h4>" + pemo.content +
-                    "</h4><div class='btn btn-group'>" + likeBtn(pemo) +
+                    "</h4><div class='btn btn-group'>" + 
+                        likeBtn(pemo) +
+                        unlikeBtn(pemo) +
+                        rePemoBtn(pemo) +
                     "</div></div>";
             return formatedItem;
         }
