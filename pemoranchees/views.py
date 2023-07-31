@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .serializers import PemoranSerializer, PemoranActionSerializer
+from .serializers import PemoranSerializer, PemoranActionSerializer, PemoranCreateSerializer
 
 from .models import Pemoran
 from .forms import PemoranForm
@@ -21,7 +21,7 @@ def my_is_ajax(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def pemoran_create_view(request):
-    serializer = PemoranSerializer(data=request.POST)
+    serializer = PemoranCreateSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -32,7 +32,6 @@ def pemoran_create_view(request):
 def pemoran_list_view(request):
     query = Pemoran.objects.all()
     serializer = PemoranSerializer(query, many=True)
-    pemoranchees_list = [obj.serialize() for obj in query]
 
     return Response(serializer.data, status=200)
 

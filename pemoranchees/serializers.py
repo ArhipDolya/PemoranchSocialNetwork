@@ -18,8 +18,8 @@ class PemoranActionSerializer(serializers.Serializer):
         else:   
             return value
         
-
-class PemoranSerializer(serializers.ModelSerializer):
+        
+class PemoranCreateSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Pemoran
@@ -34,3 +34,14 @@ class PemoranSerializer(serializers.ModelSerializer):
         else:
             return value
         
+
+class PemoranSerializer(serializers.ModelSerializer):
+    likes = serializers.SerializerMethodField(read_only=True)
+    parent = PemoranCreateSerializer(read_only=True)
+
+    class Meta:
+        model = Pemoran
+        fields = ['id', 'content', 'likes', 'is_repemo', 'parent']
+
+    def get_likes(self, obj):
+        return obj.likes.count()

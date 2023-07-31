@@ -25,10 +25,7 @@ class Pemoran(models.Model):
     def __str__(self):
         return self.content
 
-    def serialize(self):
-        return {
-            'id': self.id,
-            'content': self.content,
-            'likes': self.likes.count(),
-        }
+    @property
+    def is_repemo(self):
+        return self.parent != None
     
