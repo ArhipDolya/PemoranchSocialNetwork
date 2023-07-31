@@ -11,6 +11,7 @@ class PemoranLike(models.Model):
 
 
 class Pemoran(models.Model):
+    parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='pemoran_user', blank=True, through=PemoranLike)
     content = models.TextField(blank=True, null=True)
