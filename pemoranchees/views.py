@@ -81,6 +81,8 @@ def pemoran_action_view(request):
             return Response(serializer.data, status=200)    
         elif action == 'unlike':
             obj.likes.remove(request.user)
+            serializer = PemoranSerializer(obj)
+            return Response(serializer.data, status=200)   
         elif action == 'repemo':
             new_pemo = Pemoran.objects.create(user=request.user, parent=obj, content=content)    
             serializer = PemoranSerializer(new_pemo)
