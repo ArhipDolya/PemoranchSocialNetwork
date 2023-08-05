@@ -1,5 +1,8 @@
 /* registration.css */
 
+body {
+    font-family: Arial, sans-serif;
+}
 /* Center the form */
 form {
     max-width: 400px;
@@ -28,6 +31,7 @@ h2 {
 form p {
     margin-bottom: 10px;
 }
+
 
 /* Style input fields */
 input[type="text"],

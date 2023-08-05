@@ -1,11 +1,33 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block title %}
     <title>Login</title>
 {% endblock %}
 
+{% block link %}
+    <link rel='stylesheet' type='text/css' href="{% static 'css/PemoranchApp/login.css' %}">
+{% endblock %}
 
 
 {% block content %}
-    <h1>Login</h1>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        <h2>Sign In</h2>
+    
+        {% for field in form %}
+        <p>
+            {% if field.errors %}
+            <ul class="errorlist">
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {{ field.label_tag }} {{ field }}
+        </p>
+        {% endfor %}
+        <input type="submit" value="Login" />
+        <p>Don't have an account ? You can register <a href="{% url 'registration' %}">here</a></p>
 {% endblock %}
