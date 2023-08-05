@@ -1,0 +1,71 @@
+/* registration.css */
+
+/* Center the form */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    /* Add flexbox properties to center the form */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Ensures the form takes the full height of the viewport */
+}
+
+/* Form header */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form input fields */
+form p {
+    margin-bottom: 10px;
+}
+
+/* Style input fields */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+/* Submit button */
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Hover effect on the submit button */
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Error messages */
+.errorlist {
+    color: #dc3545;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.errorlist li {
+    margin-bottom: 5px;
+}
